@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-
-echo "hello"
-exit
 # should be placed in src/mono/sample/HelloWorld/
+
 REPO_ROOT=../../../..
 LLVM_PATH=$REPO_ROOT/artifacts/bin/mono/OSX.arm64.Debug
 MONO_SGEN=$REPO_ROOT/artifacts/obj/mono/OSX.arm64.Debug/mono/mini/mono-sgen
