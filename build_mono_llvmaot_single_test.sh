@@ -64,7 +64,7 @@ if [ $? -eq 0 ]; then
         main "mono_fullaot"
     else
         echo "--------"
-        echo "Something went wrong!"    
+        echo "Something went wrong!"
     fi
 else
     echo "--------"
