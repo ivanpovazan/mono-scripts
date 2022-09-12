@@ -7,7 +7,7 @@ MONO_SGEN=$REPO_ROOT/artifacts/obj/mono/OSX.arm64.Debug/mono/mini/mono-sgen
 export MONO_PATH=$REPO_ROOT/artifacts/bin/HelloWorld/arm64/Debug/osx-arm64/publish
 
 if [ "$1" != "build" ] && [ "$1" != "build-all" ] && [ "$1" != "run" ]; then
-    echo "Pass 'build' or 'run' as the first parameter";
+    echo "Pass 'build', 'build-all' or 'run' as the first parameter";
     exit 1
 fi
 
@@ -15,7 +15,7 @@ if [ "$1" == "build" ] || [ "$1" == "build-all" ]; then
     if [ "$2" == "interp" ]; then
         export MONO_ENV_OPTIONS="--aot=full,interp,llvm,llvm-path=$LLVM_PATH,mattr=crc,mattr=crypto"
     else
-        export MONO_ENV_OPTIONS="--aot=full,llvm,llvm-path=$LLVM_PATH,mattr=crc,mattr=crypto"
+        export MONO_ENV_OPTIONS="-O=gsharedvt --aot=full,llvm,llvm-path=$LLVM_PATH,mattr=crc,mattr=crypto"
     fi
     if [ "$1" == "build-all" ]; then 
         DLLS=$MONO_PATH/*.dll;
