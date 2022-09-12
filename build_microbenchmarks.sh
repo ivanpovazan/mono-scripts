@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# All thanks go to Fan https://github.com/fanyang-mono/myScripts for this amazing script
+
 # Repos that you need to clone before running this script
 # * https://github.com/dotnet/runtime
 # * https://github.com/dotnet/performance
