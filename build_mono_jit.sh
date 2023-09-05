@@ -2,18 +2,33 @@
 
 #vars
 BUILD_CONFIG=
+BUILD_ALL=
 
 parse_args() {
-    if [ -z "$1" ] || [ "$1" == "d" ]; then
-        BUILD_CONFIG="Debug"
-        return 0;
-    elif [ "$1" == "r" ]; then
-        BUILD_CONFIG="Release"
-        return 0;
-    else
-        echo "Invalid value '$1' for build configuration"
+    if [ -z "$1" ] || ([ "$1" != "d" ] && [ "$1" != "r" ]); then
+        if [ -z "$1" ]; then
+            echo "You must specify build configuration 'd' for Debug or 'r' for Release"
+        else
+            echo "Invalid value '$1' for build configuration"
+        fi
         return 1;
+    elif [ "$1" == "d" ]; then
+        BUILD_CONFIG="Debug"
+    else
+        BUILD_CONFIG="Release"
     fi
+
+    if [ -z "$2" ]; then
+        BUILD_ALL=
+    else
+        if [ "$2" == "all" ]; then
+            BUILD_ALL="+libs+clr.hosts"
+        else
+            echo "Invalid value '$2' for subsets"
+            return 1;
+        fi
+    fi
+    return 0
 }
 
 build () {
@@ -21,9 +36,6 @@ build () {
     if [[ "$?" -eq 0 ]]; then
         echo "--------"
         echo "SUCCESS"
-        echo "Exporting CORE_ROOT environment variable"
-        export CORE_ROOT="$PWD/artifacts/tests/coreclr/OSX.arm64.Debug/Tests/Core_Root"
-        echo "CORE_ROOT=$CORE_ROOT"
         echo "--------"
         return 0
     else
@@ -35,7 +47,7 @@ build () {
 }
 
 main () {
-    CMD="src/tests/build.sh mono $BUILD_CONFIG /p:LibrariesConfiguration=$BUILD_CONFIG generatelayoutonly"
+    CMD="./build.sh mono$BUILD_ALL -c $BUILD_CONFIG"
     echo "Building from: $PWD"
     echo  "With command: $CMD"
     while true; do

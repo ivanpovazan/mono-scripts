@@ -2,16 +2,32 @@
 
 #vars
 BUILD_CONFIG=
+TARGET_OS=
 
 parse_args() {
-    if [ -z "$1" ] || [ "$1" == "d" ]; then
+    if [ "$1" == "d" ]; then
         BUILD_CONFIG="Debug"
-        return 0;
     elif [ "$1" == "r" ]; then
         BUILD_CONFIG="Release"
-        return 0;
     else
         echo "Invalid value '$1' for build configuration"
+        return 1;
+    fi
+
+    if [ ! -z "$2" ] && ([ "$2" == "ios" ] || [ "$2" == "iossim" ] || [ "$2" == "tvos" ] || [ "$2" == "tvossim" ] || [ "$2" == "maccat" ]) ; then
+        if [ "$2" == "iossim" ] ; then
+            TARGET_OS="iossimulator"
+        elif [ "$2" == "tvossim" ]; then
+            TARGET_OS="tvossimulator"
+        elif [ "$2" == "maccat" ]; then
+            TARGET_OS="maccatalyst"
+        else
+            TARGET_OS=$2
+        fi
+        echo "Chosen target os is: '$TARGET_OS'"
+        return 0;
+    else
+        echo "Invalid value '$2' for target os"
         return 1;
     fi
 }
@@ -32,7 +48,7 @@ build () {
 }
 
 main () {
-    CMD="./build.sh mono+libs -c $BUILD_CONFIG -os iOSSimulator -arch arm64"
+    CMD="./build.sh mono+libs -c $BUILD_CONFIG -os $TARGET_OS -arch arm64"
     echo "Building from: $PWD"
     echo  "With command: $CMD"
     while true; do
@@ -53,4 +69,5 @@ if [ $ok -eq 0 ]; then
 else
     echo "--------"
     echo "Something went wrong!"
+    echo "Call the script with: 'bmios d ios'"
 fi

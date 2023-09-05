@@ -44,7 +44,7 @@ build () {
 }
 
 main () {
-    CMD="src/tests/build.sh $1 $BUILD_CONFIG /p:LibrariesConfiguration=$BUILD_CONFIG -test:$TEST_PROJ"
+    CMD="src/tests/build.sh $1 $BUILD_CONFIG $2 /p:LibrariesConfiguration=$BUILD_CONFIG -test:$TEST_PROJ"
     echo "Building from: $PWD"
     echo  "With command: $CMD"
     while true; do
@@ -59,9 +59,9 @@ main () {
 
 parse_args $@
 if [ $? -eq 0 ]; then
-    main "mono"
+    main "mono" ""
     if [ $? -eq 0 ]; then
-        main "mono_fullaot"
+        main "mono_fullaot" "/p:RuntimeVariant=llvmfullaot"
     else
         echo "--------"
         echo "Something went wrong!"
